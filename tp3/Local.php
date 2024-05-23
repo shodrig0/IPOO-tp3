@@ -96,6 +96,91 @@ class Local
         return $costoFinal;
     }
 
+    public function productoMasEconomico($rubro)
+    {
+        $productoEconomico = null;
+        $colProductos = $this->getColProductos();
+        $enum = count($colProductos);
+
+        for ($i = 0; $i < $enum; $i++) {
+            if ($colProductos->getObjRubro()->getDescripcion() == $rubro) { // segun la descripcion del rubro
+                if ($productoEconomico == null) {
+                    $productoEconomico = $colProductos[$i];
+                } else {
+                    if ($productoEconomico->darPrecioVenta() > $colProductos[$i]->darPrecioVenta()) { // segun el precio
+                        $productoEconomico = $colProductos[$i];
+                    }
+                }
+            }
+        }
+        return $productoEconomico;
+    }
+
+    public function informarProductosMasVendidos($anio, $n)
+    {
+        $colProdVendidos = [];
+        $colVentas = $this->getColVentas();
+        $enum = count($colVentas);
+
+        for ($i = 0; $i < $enum; $i++) {
+            $anioVenta = date_format($colVentas[$i]->getFecha(), "Y"); // objeto y fecha
+            if ($anioVenta == $anio) {
+                for ($j = 0; $j < count($colVentas[$i]->getColProductos()); $j++) {
+                    if ($colProdVendidos[$j]->getCodigoBarra() == $colVentas[$j]->getColProductos()[$j]->getCodigoBarra()) {
+                        $colProdVendidos[$j]++;
+                    } else {
+                        $colProdVendidos[$j] = 1;
+                    }
+                }
+            }
+        }
+
+        arsort($colProdVendidos);
+
+        $colProdMasVendidos = [];
+        for ($k = 0; $k < $n; $k++) {
+            $productoX = $this->buscarProducto($colProdVendidos[$k]);
+            $colProdMasVendidos[$k] = $productoX;
+        }
+        return $colProdMasVendidos;
+    }
+
+    public function promedioVentasImportados()
+    {
+        $colVentas = $this->getColVentas();
+        $enum = count($colVentas);
+        $promedio = 0;
+        $sumaProd = 0;
+        $sumaVentas = 0;
+
+        for ($i = 0; $i < $enum; $i++) {
+            for ($j = 0; $j < count($colVentas[$i]->getColProductos()); $j++) {
+                if ($colVentas[$i]->getColProductos()[$j] instanceof ProductoImportado) {
+                    $sumaVentas += $colVentas[$i]->getColProductos()[$j]->darPrecioVenta();
+                    $sumaProd++;
+                }
+            }
+        }
+        $promedio = $sumaVentas / $sumaProd;
+        return $promedio;
+    }
+
+    public function informarConsumoCliente($tipoDoc, $numDoc)
+    {
+        $colVentas = $this->getColVentas();
+        $colProductosCompradosCliente = [];
+
+        foreach ($colVentas as $venta) {
+            $cliente = $venta->getObjCliente();
+            if ($cliente->getDNI() == $numDoc) {
+                foreach ($venta->getColProductos() as $producto) {
+                    $colProductosCompradosCliente[] = $producto;
+                }
+            }
+        }
+        return $colProductosCompradosCliente;
+    }
+
     private function buscarProducto($codigoBarra)
     {
         $banderaCorte = false;

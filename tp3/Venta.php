@@ -4,13 +4,13 @@ class Venta
 {
     private $fecha;
     private $referenciaProducto;
-    private $cliente;
+    private $objCliente;
 
-    public function __construct($fecha, $referenciaProducto, $cliente)
+    public function __construct($fecha, $referenciaProducto, $objCliente)
     {
         $this->fecha = $fecha;
         $this->referenciaProducto = $referenciaProducto;
-        $this->cliente = $cliente;
+        $this->objCliente = $objCliente;
     }
 
     // getters
@@ -24,9 +24,9 @@ class Venta
         return $this->referenciaProducto;
     }
 
-    public function getCliente()
+    public function getObjCliente()
     {
-        return $this->cliente;
+        return $this->objCliente;
     }
 
     // setters
@@ -40,9 +40,9 @@ class Venta
         $this->referenciaProducto = $referenciaProducto;
     }
 
-    public function setCliente($cliente)
+    public function setObjCliente($objCliente)
     {
-        $this->cliente = $cliente;
+        $this->objCliente = $objCliente;
     }
 
     public function darImporteVenta()
@@ -61,7 +61,7 @@ class Venta
     {
         $msj = "Fecha: " . $this->getFecha() . "\n";
         $msj .= "Referencia Producto: " . $this->getReferenciaProducto() . "\n";
-        $msj .= "Cliente: " . $this->getCliente() . "\n";
+        $msj .= "Cliente: " . $this->getObjCliente() . "\n";
         return $msj;
     }
 }
