@@ -5,9 +5,9 @@ include_once 'ProductoImportado.php';
 include_once 'ProductoRegional.php';
 include_once 'Venta.php';
 include_once 'Local.php';
-include_once 'Cliente.php';
 include_once 'Rubro.php';
-include_once 'Persona.php';
+include_once '../tp3/Persona.php';
+include_once '../tp3/Cliente.php';
 
 
 $objRubroConservas = new Rubro("Conservas", "Conservas", 35);
@@ -25,3 +25,5 @@ $objLocal->incorporarProductoLocal($objProducto2);
 $objLocal->incorporarProductoLocal($objProducto3);
 $objLocal->incorporarProductoLocal($objProducto4);
 $objLocal->incorporarProductoLocal($objProducto4);
+
+echo $objLocal;
